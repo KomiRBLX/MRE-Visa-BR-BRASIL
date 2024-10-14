@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulação de Assinatura e Informações</title>
+    <link href="https://fonts.googleapis.com/css2?family=Herr+Von+Muellerhoff&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4; /* Cor de fundo clara */
+        }
+        .container {
+            position: relative;
+            width: 600px;
+            background-color: white; /* Fundo branco para destacar a imagem */
+            border-radius: 8px; /* Bordas arredondadas */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para profundidade */
+            padding: 20px; /* Espaçamento interno */
+        }
+        .image-wrapper {
+            position: relative;
+        }
+        .image-wrapper img {
+            width: 100%;
+            border-radius: 8px; /* Bordas arredondadas na imagem */
+        }
+        .text-overlay {
+            position: absolute;
+            color: black; /* Cor do texto */
+            font-size: 24px; /* Tamanho da fonte */
+            font-family: 'Times New Roman', serif; /* Fonte para informações */
+            font-weight: normal; /* Peso normal para Times New Roman */
+            white-space: nowrap; /* Impede a quebra de linha */
+        }
+        .name {
+            top: 50px; /* Posição para o Nome */
+            left: 50px;
+            opacity: 0;
+        }
+        .option1 {
+            top: 100px; /* Posição para a Opção 1 */
+            left: 50px;
+            opacity: 0;
+        }
+        .option2 {
+            top: 150px; /* Posição para a Opção 2 */
+            left: 50px;
+            opacity: 0;
+        }
+        .option3 {
+            top: 200px; /* Posição para a Opção 3 */
+            left: 50px;
+            opacity: 0;
+        }
+        .option4 {
+            top: 250px; /* Posição para a nova Opção 4 */
+            left: 50px;
+            opacity: 0;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        .controls input {
+            margin: 10px 0;
+            padding: 10px; /* Aumentado para conforto */
+            width: 100%;
+            font-size: 16px;
+            border: 1px solid #ccc; /* Bordas */
+            border-radius: 4px; /* Bordas arredondadas */
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombra interna */
+        }
+        .generate-button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px; /* Bordas arredondadas */
+            transition: background-color 0.3s; /* Efeito de transição */
+        }
+        .generate-button:hover {
+            background-color: #0056b3;
+        }
+        #resultImage {
+            margin-top: 20px;
+            display: none;
+            max-width: 600px; /* Aumentado o tamanho máximo para visualização */
+            height: auto; /* Mantém a proporção */
+            border-radius: 8px; /* Bordas arredondadas */
+        }
+        #downloadButton {
+            margin-top: 10px;
+            display: none; /* Inicialmente escondido */
+            text-decoration: none; /* Sem sublinhado */
+            background-color: #28a745; /* Cor verde para o botão de download */
+            color: white;
+            padding: 10px 15px; /* Estilizando o botão de download */
+            border-radius: 4px; /* Bordas arredondadas */
+            transition: background-color 0.3s; /* Efeito de transição */
+        }
+        #downloadButton:hover {
+            background-color: #218838; /* Tom mais escuro ao passar o mouse */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Imagem base -->
+    <div class="image-wrapper">
+        <img src="Visa.jpg" alt="Imagem Visa" id="baseImage">
+        <!-- Textos sobre a imagem -->
+        <div class="text-overlay name" id="nameText"></div>
+        <div class="text-overlay option1" id="option1Text"></div>
+        <div class="text-overlay option2" id="option2Text"></div>
+        <div class="text-overlay option3" id="option3Text"></div>
+        <div class="text-overlay option4" id="option4Text"></div>
+    </div>
+
+    <!-- Controles para adicionar texto -->
+    <div class="controls">
+        <h3>SOBRE O GERADOR DE RELATÓRIOS DE APROVAÇÃO DE VISTO</h3>
+        <div><h5>Qual sua função</h5>
+    O sistema de geração de relatórios de visto, é de uso único e restrito dos consulados/embaixadas do Ministério das Relações Exteriores do [BR] Brasil, sendo desenvolvido pela Ministra de Estado das Relações Exteriores para auxiliar na emissão de aprovação de vistos, com uma nova ideia de roleplay entre nações amigas. Implementando o turismo e o sistema de vistos.<div>
+        <div><h5>Como funciona</h5>
+         Basta preencher tudo corretamente conforme cada campo solicita e gerar a imagem, assim sairá pronto um relatório de aprovação.<div>
+
+            <h4>-  -  -  -  - -  -  -  -  - -  -  -  -  - -  -  -  -  - -  -  -  -  - -  -  -  -  -</h4>
+
+        <h3>Aplicante do visto</h3>
+
+        <label for="inputName">Nome do aplicante aprovado (Username):</label>
+        <input type="text" id="inputName" placeholder="Digite seu nome">
+        
+        <h3>Identificação do responsável pela emissão</h3>
+
+        <label for="inputSignature">Assinatura do responsável pela emissão:</label>
+        <input type="text" id="inputSignature" placeholder="Digite sua assinatura">
+        
+        <label for="inputOption4">Nome e cargo em inglês (Exemplo: AkemiiRBLX, Minister of Foreign Affairs):</label>
+        <input type="text" id="inputOption4" placeholder="Digite a nova informação aqui">
+
+        <h3>Tipo de visto - A partir dessa parte, coloque o "X" apenas no campo desejado</h3>
+
+        <label for="inputOption1">Turismo:</label>
+        <input type="text" id="inputOption1" placeholder="(Insira X caso seja, e deixe os outros campos limpos)">
+        
+        <label for="inputOption2">Negócios:</label>
+        <input type="text" id="inputOption2" placeholder="(Insira X caso seja, e deixe os outros campos limpos)">
+        
+        <label for="inputOption3">Outros:</label>
+        <input type="text" id="inputOption3" placeholder="(Insira X caso seja, e deixe os outros campos limpos)">
+    
+
+        <button class="generate-button" id="generateImage">Gerar Imagem</button>
+    </div>
+</div>
+
+<canvas id="canvas" style="display:none;"></canvas>
+<div>
+    <a id="downloadButton" href="#" download="imagem_final.png">Baixar Imagem</a>
+    <img id="resultImage" alt="Resultado da Imagem" />
+</div>
+
+<script>
+    // Seleciona os elementos de texto e os campos de entrada
+    const nameTextElement = document.getElementById('nameText');
+    const option1TextElement = document.getElementById('option1Text');
+    const option2TextElement = document.getElementById('option2Text');
+    const option3TextElement = document.getElementById('option3Text');
+    const option4TextElement = document.getElementById('option4Text');
+
+    const inputName = document.getElementById('inputName');
+    const inputSignature = document.getElementById('inputSignature');
+    const inputOption1 = document.getElementById('inputOption1');
+    const inputOption2 = document.getElementById('inputOption2');
+    const inputOption3 = document.getElementById('inputOption3');
+    const inputOption4 = document.getElementById('inputOption4');
+
+    // Atualiza os textos quando o usuário digita
+    inputName.addEventListener('input', function() {
+        nameTextElement.textContent = inputName.value || '';
+    });
+    inputSignature.addEventListener('input', function() {
+        // A assinatura não é sobreposta no canvas, apenas para visualização
+    });
+    inputOption1.addEventListener('input', function() {
+        option1TextElement.textContent = inputOption1.value || '';
+    });
+    inputOption2.addEventListener('input', function() {
+        option2TextElement.textContent = inputOption2.value || '';
+    });
+    inputOption3.addEventListener('input', function() {
+        option3TextElement.textContent = inputOption3.value || '';
+    });
+    inputOption4.addEventListener('input', function() {
+        option4TextElement.textContent = inputOption4.value || '';
+    });
+
+    // Gera a imagem final
+    document.getElementById('generateImage').addEventListener('click', function() {
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const baseImage = document.getElementById('baseImage');
+
+        // Define o tamanho do canvas para A4 (2480 x 3508 pixels)
+        canvas.width = 2480;  // Largura A4 em pixels
+        canvas.height = 3508; // Altura A4 em pixels
+
+        // Desenha a imagem de fundo
+        context.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
+
+        // Configura a fonte para os textos (Times New Roman)
+        context.font = '50px "Times New Roman", serif';
+        context.fillStyle = 'black'; // Cor do texto
+
+        // Desenha os textos normais no canvas
+        context.fillText(inputName.value || '', 770, 1405);
+        context.fillText(inputOption1.value || '', 782, 1510);
+        context.fillText(inputOption2.value || '', 782, 1560);
+        context.fillText(inputOption3.value || '', 782, 1620);
+        context.textAlign = 'right';
+        context.fillText(inputOption4.value || '', 2165, 2740); // Nova informação
+
+        // Configura a fonte para a assinatura
+        context.font = 'bold 75px "Herr Von Muellerhoff", cursive'; // Fonte para a assinatura
+        context.fillText(inputSignature.value || '', 2165, 2680); // Posição para a assinatura (ajuste conforme necessário)
+
+        // Adiciona a data e hora no canto inferior direito
+        const now = new Date();
+        const options = { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+        const formattedDate = now.toLocaleString('pt-BR', options);
+        context.font = '30px Arial'; // Tamanho da fonte para data/hora
+        context.fillStyle = 'black'; // Cor do texto
+        context.textAlign = 'right';
+        context.fillText(formattedDate, canvas.width - 30, canvas.height - 30); // Posição para a data/hora
+
+        // Cria uma URL da imagem gerada
+        const imageURL = canvas.toDataURL("image/png");
+        const resultImage = document.getElementById('resultImage');
+        resultImage.src = imageURL;
+        resultImage.style.display = 'block'; // Exibe a imagem gerada
+
+        // Configura o botão de download
+        const downloadButton = document.getElementById('downloadButton');
+        downloadButton.href = imageURL; // Define o link do botão de download
+        downloadButton.style.display = 'block'; // Exibe o botão de download
+    });
+</script>
+
+</body>
+</html>

@@ -207,45 +207,46 @@
         option4TextElement.textContent = inputOption4.value || '';
     });
 
-    // Gera a imagem final
-    document.getElementById('generateImage').addEventListener('click', function() {
-        const canvas = document.getElementById('canvas');
-        const context = canvas.getContext('2d');
-        const baseImage = document.getElementById('baseImage');
+   // Gera a imagem final
+document.getElementById('generateImage').addEventListener('click', function() {
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    const baseImage = document.getElementById('baseImage');
 
-        // Define o tamanho do canvas para A4 (2480 x 3508 pixels)
-        canvas.width = 2480;  // Largura A4 em pixels
-        canvas.height = 3508; // Altura A4 em pixels
+    // Define o tamanho do canvas para A4 (2480 x 3508 pixels)
+    canvas.width = 2480;  // Largura A4 em pixels
+    canvas.height = 3508; // Altura A4 em pixels
 
-        // Desenha a imagem de fundo
-        context.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
+    // Desenha a imagem de fundo
+    context.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
 
-        // Configura a fonte para os textos (Times New Roman)
-        context.font = '50px "Times New Roman", serif';
-        context.fillStyle = 'black'; // Cor do texto
+    // Configura a fonte para os textos (Times New Roman)
+    context.font = '50px "Times New Roman", serif';
+    context.fillStyle = 'black'; // Cor do texto
 
-        // Desenha os textos normais no canvas
-        context.fillText(inputName.value || '', 770, 1405);
-        context.fillText(inputOption1.value || '', 782, 1510);
-        context.fillText(inputOption2.value || '', 782, 1560);
-        context.fillText(inputOption3.value || '', 782, 1620);
-        context.textAlign = 'right';
-        context.fillText(inputOption4.value || '', 2165, 2740); // Nova informação
+    // Desenha os textos normais no canvas
+    context.fillText(inputName.value || '', 770, 1405);
+    context.fillText(inputOption1.value || '', 782, 1510);
+    context.fillText(inputOption2.value || '', 782, 1560);
+    context.fillText(inputOption3.value || '', 782, 1620);
+    context.textAlign = 'right';
+    context.fillText(inputOption4.value || '', 2165, 2740); // Nova informação
 
-        // Configura a fonte para a assinatura
-        context.font = 'bold 75px "Herr Von Muellerhoff", cursive'; // Fonte para a assinatura
-        context.fillText(inputSignature.value || '', 2165, 2680); // Posição para a assinatura (ajuste conforme necessário)
+    // Configura a fonte para a assinatura
+    context.font = 'bold 75px "Herr Von Muellerhoff", cursive'; // Fonte para a assinatura
+    context.fillText(inputSignature.value || 'AkemiiRBLX', 2165, 2680); // Posição para a assinatura (ajuste conforme necessário)
 
-        // Adiciona a data e hora no canto inferior direito
-        const now = new Date();
-        const options = { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
-        const formattedDate = now.toLocaleString('pt-BR', options);
-        context.font = '30px Arial'; // Tamanho da fonte para data/hora
-        context.fillStyle = 'black'; // Cor do texto
-        context.textAlign = 'right';
-        context.fillText(formattedDate, canvas.width - 30, canvas.height - 30); // Posição para a data/hora
+    // Adiciona a imagem do selo
+    const seloImagem = new Image();
+    seloImagem.src = 'selobrasil.png';
 
-        // Cria uma URL da imagem gerada
+    seloImagem.onload = function() {
+        // Desenha a imagem do selo na posição desejada (ajuste as coordenadas conforme necessário)
+        context.globalAlpha = 0.65
+        context.drawImage(seloImagem, 1680, 2500, 600, 250); // Ajuste a posição e o tamanho do selo
+        context.globalAlpha = 1
+
+        // Cria uma URL da imagem gerada depois que o selo é desenhado
         const imageURL = canvas.toDataURL("image/png");
         const resultImage = document.getElementById('resultImage');
         resultImage.src = imageURL;
@@ -255,7 +256,24 @@
         const downloadButton = document.getElementById('downloadButton');
         downloadButton.href = imageURL; // Define o link do botão de download
         downloadButton.style.display = 'block'; // Exibe o botão de download
-    });
+    };
+
+    // Se a imagem não carregar, você pode adicionar um evento de erro
+    seloImagem.onerror = function() {
+        console.error('Erro ao carregar a imagem do selo.');
+    };
+
+    // Adiciona a data e hora no canto inferior direito
+    const now = new Date();
+    const options = { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+    const formattedDate = now.toLocaleString('pt-BR', options);
+    context.font = '30px Arial'; // Tamanho da fonte para data/hora
+    context.fillStyle = 'black'; // Cor do texto
+    context.textAlign = 'right';
+    context.fillText(formattedDate, canvas.width - 30, canvas.height - 60); // Posição para a data/hora
+    context.fillText("Document generated by the Visa Approval Report Generator System of the Brazilian Ministry of Foreign Affairs.", canvas.width - 30, canvas.height - 30)
+      context.fillText("The date entered above is the actual date and time this document was generated, in Brasilia time. If in doubt, check the accuracy directly with the Brazilian Ministry of Foreign Affairs.", canvas.width - 30, canvas.height - 0)
+});
 </script>
 
 </body>
